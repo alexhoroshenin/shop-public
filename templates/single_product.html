@@ -1,0 +1,71 @@
+{% load thumbnail %}
+{% load tags %}
+
+<div class="product__box product__box--default product__box--border-hover text-center" data-cart-item-id="" data-product-id="{{ p.pk }}">
+    <div class="product__img-box {% if not p.plus_balance %}low-opacity-image{% endif %}">
+
+        {% thumbnail p.images.first.image "540x540" crop="center" as im %}
+                <a href="/{{ p.get_full_url }}" class="product__img--link">
+                    <img class="product__img" src="{{ im.url }}" alt="">
+                </a>
+            {% empty %}
+                {% thumbnail DEFAULT_PRODUCT_IMAGE "540x540" crop="center" as im %}
+                <a href="/{{ p.get_full_url }}" class="product__img--link">
+                    <img class="product__img" src="{{ im.url }}" alt="">
+                </a>
+            {% endthumbnail %}
+        {% endthumbnail %}
+
+        {% if p.has_discount %}
+            <span class="product__tag product__tag--discount">- {{ p.discount_percent }}%</span>
+        {% endif %}
+<!--        <a href="wishlist.html" class="product__wishlist-icon"><i class="icon-heart"></i></a>-->
+    </div>
+    {% if p.plus_balance %}
+        <div class="product__price m-t-10">
+            {% if p.has_discount %}
+                <span class="product__price-del">{{ p.price|floatformat }}</span>
+                <span class="product__price-reg">{{ p.get_discount_price|floatformat }} ₽</span>
+            {% else %}
+                <span class="product__price-reg">{{ p.price|floatformat }} ₽</span>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="product__price m-t-10">
+            <span class="product__price">Нет в наличии</span>
+        </div>
+    {% endif %}
+
+    <a href="/{{ p.get_full_url }}"
+       class="product__link product__link--underline product__link--weight-light m-t-15">
+        {{ p.name }}
+    </a>
+
+    {% if p.plus_balance %}
+<!--            <div class="btn-category-page">-->
+<!--                <button type="submit" data-product-id="{{ p.pk }}"-->
+<!--                        class="btn btn-outline-success btn-product-box btn&#45;&#45;box btn&#45;&#45;small btn&#45;&#45;uppercase btn&#45;&#45;weight disabled btn-disabled" >В КОРЗИНЕ-->
+<!--                </button>-->
+<!--            </div>-->
+
+
+            <div class="product-in-cart {% if p in cart_products_dict %}{% else %}d-none{% endif %}">
+                <div class="col-12 d-flex justify-content-lg-center justify-content-md-left justify-content-sm-left btn-product-box">
+                    <button type="button" class="btn change-count-btn btn-light mx-1">-</button>
+                    <input type="number" inputmode="numeric" max="9999" min="0" step="1" data-product-count-field="" class="text-center change-count-input"
+                           value="{% if p in cart_products_dict %}{{ cart_products_dict|get_by_key:p|floatformat }}{% else %}1{% endif %}">
+                    <button type="button" class="btn change-count-btn btn-light mx-1">+</button>
+                </div>
+                <div class="col-12 d-flex justify-content-lg-center justify-content-md-left justify-content-sm-left my-0 balance-limit text-danger">
+                    {% if count_in_cart > product.get_balance %}Доступно: {{ product.get_balance|floatformat }}{% endif %}
+                </div>
+            </div>
+
+            <div class="product-not-in-cart {% if p in cart_products_dict %}d-none{% else %}{% endif %}">
+                <button type="submit" data-product-id="{{ p.pk }}"
+                        class="btn btn-product-box btn--box btn--small btn--blue btn--uppercase btn--weight btn-add-into-cart" >В КОРЗИНУ
+                </button>
+            </div>
+    {% endif %}
+
+</div>

@@ -1,0 +1,77 @@
+{% if page_obj.paginator.num_pages > 1 %}
+
+{% load tags %}
+{% GET_params_except_page request as get_params_str %}
+
+<div class="row justify-content-center">
+    <div class="pagin">
+        {% if page_obj.has_previous %}
+            <ul class="page-pagination__list">
+                <li class="page-pagination__item">
+                    <a class="page-pagination__link btn btn--gray" href="?page=1{{ get_params_str }}"><i class="icon-chevron-left"></i>
+                        В начало</a>
+                </li>
+                <li class="page-pagination__item">
+                    <a class="page-pagination__link btn btn--gray" href="?page={{ page_obj.previous_page_number }}{{ get_params_str }}"><i class="icon-chevron-left"></i>
+                        Предыдущая</a>
+                </li>
+        {% endif %}
+
+        {% if page_obj.paginator.num_pages <= 6 %}
+            {% for page in page_obj.paginator.page_range %}
+                {% if page == page_obj.number %}
+                    <li class="page-pagination__item"><a class="page-pagination__link active btn btn--gray" href="?page={{ page }}{{ get_params_str }}">{{ page }}</a></li>
+                {% else %}
+                    <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page={{ page }}{{ get_params_str }}">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+        {% else %}
+            {% if page_obj.number == 1 %}
+                <li class="page-pagination__item"><a class="page-pagination__link active btn btn--gray" href="?page=1{{ get_params_str }}">1</a></li>
+                <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page=2{{ get_params_str }}">2</a></li>
+                <span> ... </span>
+                <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page={{ page_obj.paginator.page_range|last }}{{ get_params_str }}">{{ page_obj.paginator.page_range|last }}</a></li>
+            {% else %}
+                {% if page_obj.has_previous %}
+                    {% if page_obj.number == 2 %}
+                            <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page=1{{ get_params_str }}">1</a></li>
+                    {% elif page_obj.number == 3 %}
+                        <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page=1{{ get_params_str }}">1</a></li>
+                        <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page=2{{ get_params_str }}">2</a></li>
+                    {% else %}
+                        <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page=1{{ get_params_str }}">1</a></li>
+                        <span> ... </span>
+                        <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page={{ page_obj.previous_page_number }}{{ get_params_str }}">{{ page_obj.previous_page_number }}</a></li>
+                    {% endif %}
+                {% endif %}
+
+                <li class="page-pagination__item"><a class="page-pagination__link active btn btn--gray" href="?page={{ page_obj.number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ page_obj.number }}</a></li>
+
+                {% if page_obj.has_next %}
+                    {% if page_obj.next_page_number == page_obj.paginator.num_pages %}
+                        <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page={{ page_obj.paginator.page_range|last }}{{ get_params_str }}">{{ page_obj.paginator.page_range|last }}</a></li>
+                    {% elif page_obj.number|add:2 < page_obj.paginator.num_pages %}
+                        <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page={{ page_obj.next_page_number }}{{ get_params_str }}">{{ page_obj.next_page_number }}</a></li>
+                        <span> ... </span>
+                        <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page={{ page_obj.paginator.page_range|last }}{{ get_params_str }}">{{ page_obj.paginator.page_range|last }}</a></li>
+                    {% else %}
+                        <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page={{ page_obj.next_page_number }}{{ get_params_str }}">{{ page_obj.next_page_number }}</a></li>
+                        <li class="page-pagination__item"><a class="page-pagination__link btn btn--gray" href="?page={{ page_obj.paginator.page_range|last }}{{ get_params_str }}">{{ page_obj.paginator.page_range|last }}</a></li>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <li class="page-pagination__item">
+                <a class="page-pagination__link btn btn--gray" href="?page={{ page_obj.next_page_number }}{{ get_params_str }}">Следующая<i
+                        class="icon-chevron-right"></i></a>
+            </li>
+        </ul>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endif %}

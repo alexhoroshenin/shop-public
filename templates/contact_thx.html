@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}{{ shop_title }}{% endblock %}
+{% block content %}
+{{ block.super }}
+
+    <!-- ::::::  Start  Main Container Section  ::::::  -->
+    <main id="main-container" class="main-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-content">
+                        <h1 class="mt-3 mb-3">Благдарим за ваше сообщение!</h1>
+                        <p></p>
+                        <br>
+                        <br>
+                        <br>
+                        <p>Обращение зарегистировано под номером: {{ client_message.pk }}</p>
+                        <p>Дата: {{ client_message.date_created|date:"j.m.Y" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main> <!-- ::::::  End  Main Container Section  ::::::  -->
+
+{% endblock %}

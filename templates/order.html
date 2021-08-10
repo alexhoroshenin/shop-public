@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block content %}
+{{ block.super }}
+
+    <!-- ::::::  Start  Main Container Section  ::::::  -->
+    <main id="main-container" class="main-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+
+                        <div class="section-content mt-5 mb-3">
+                            <h1 class="">Заказ №: {{ order.pk }}</h1>
+                        </div>
+
+                        <div>
+                            Дата создания: {{ order.date_created_str }}
+                        </div>
+                        <div>
+                            Статус: {{ order.status }}
+                        </div>
+                        <div>
+                            Адрес доставки: {{ order.shipping_address }}
+                        </div>
+
+                        <div>
+                            Способ доставки: {{ order.delivery_method }}
+                        </div>
+                        <div>
+                            Способ оплаты: {{ order.payment_method }}
+                        </div>
+
+                        <!-- Start Cart Table -->
+                        <div class="table-content table-responsive cart-table-content m-t-30">
+                            <table>
+                                <thead class="bg-white">
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in order.order_items.all %}
+
+                                <tr>
+                                    <td class="product-thumbnail">
+                                        {% thumbnail item.product.get_primary_image.image "250x250" crop="center" as im %}
+                                        <a href="/{{ item.product.get_full_url }}">
+                                            <img class="img-fluid" src="{{ im.url }}" alt="{{ item.product.name }}">
+                                        </a>
+                                        {% empty %}
+                                            {% thumbnail DEFAULT_PRODUCT_IMAGE "250x250" crop="center" as im %}
+                                            <a href="/{{ item.product.get_full_url }}">
+                                                <img class="img-fluid" src="{{ im.url }}" alt="{{ item.product.name }}">
+                                            </a>
+                                            {% endthumbnail %}
+                                        {% endthumbnail %}
+                                    </td>
+                                    <td class="product-name"><a href="/{{ item.product.get_full_url }}">{{ item.product.name}}</a></td>
+                                    <td class="product-price-cart"><span
+                                            class="amount">{{ item.price|floatformat }} руб</span></td>
+                                    <td class="product-quantities">
+                                        <div class="quantity d-inline-block">
+                                            <span>{{ item.quantity|floatformat }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>  <!-- End Cart Table -->
+                </div>
+
+            </div>
+
+
+        </div>
+    </main> <!-- ::::::  End  Main Container Section  ::::::  -->
+
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}{{ shop_title }}{% endblock %}
+{% block content %}
+{{ block.super }}
+
+<!-- ::::::  Start  Main Container Section  ::::::  -->
+<main id="main-container" class="main-container">
+
+    <div class="hero-banner m-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <!-- ::::::  Start Hero Section  ::::::  -->
+                    <div class="hero hero-slider hero---2">
+                        <div class="swiper-wrapper">
+                            <!-- Start Hero Image -->
+                            <div class="hero-img hero-img--2 swiper-slide"
+                                 style="background-image: url(/media/images/banners/hero3.jpg);">
+                                <div class="hero__content">
+                                    <div class="row">
+                                        <div class="col-9 offset-1">
+                                            <div class="title title--normal title--white title--thin">Смартфон-слайдер</div>
+                                            <div class="title title--normal title--white title--regular">Модель 2021 года</div>
+                                            <div class="title title--white title--description"></div>
+                                            <a href="single-1.html"
+                                               class="btn btn--box btn--border-white btn--large btn--uppercase btn--weight">Узнать больше</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- End Hero Image -->
+                            <!-- Start Hero Image -->
+                            <div class="hero-img hero-img--2  swiper-slide"
+                                 style="background-image: url(/media/images/banners/hero2.jpg);">
+                                <div class="hero__content">
+                                    <div class="row">
+                                        <div class="col-9 offset-1">
+                                            <div class="title title--normal title--white title--thin">DJI Zenmuse X7
+                                            </div>
+                                            <div class="title title--normal title--white title--regular">Drone Expert
+                                                Services
+                                            </div>
+                                            <div class="title title--description title--white">Sale Offer <span
+                                                    class="title--white">-20% Off</span> This Week
+                                            </div>
+                                            <a href="single-1.html"
+                                               class="btn btn--box btn--border-white btn--large btn--uppercase btn--weight">Shopping
+                                                Now</a>
+                                        </div>
+                                    </div>
+                                </div> <!-- End Hero Image -->
+                            </div>
+                            <!-- Start Hero Image -->
+                            <div class="hero-img hero-img--2 swiper-slide"
+                                 style="background-image: url(assets/img/hero/hero-home-2-img-3.jpg);">
+                                <div class="hero__content">
+                                    <div class="row">
+                                        <div class="col-9 offset-1">
+                                            <div class="title title--normal title--white title--thin">SAMSUNG</div>
+                                            <div class="title title--normal title--white title--regular">GALAXY S9 /
+                                                S9+
+                                            </div>
+                                            <div class="title title--description title--white">Sale Offer <span
+                                                    class="title--white">-20% Off</span> This Week
+                                            </div>
+                                            <a href="single-1.html"
+                                               class="btn btn--box btn--large btn--blue btn--uppercase btn--weight">Shopping
+                                                Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- End Hero Image -->
+
+                            <!-- Add Pagination -->
+                            <div class="swiper-pagination hero__dots hero__dots--2"></div>
+                            <!-- Add Arrows -->
+                            <div class="swiper-buttons">
+                                <!-- Add Arrows -->
+                                <div class="swiper-button-next hero__nav hero__nav--next"><i
+                                        class="far fa-chevron-right"></i></div>
+                                <div class="swiper-button-prev hero__nav hero__nav--prev"><i
+                                        class="far fa-chevron-left"></i></div>
+                            </div>
+                        </div> <!-- ::::::  End Hero Section  ::::::  -->
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ::::::  Start  Product Style - Default Section  ::::::  -->
+    <div class="product product--1 swiper-outside-arrow-hover">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-content section-content--border d-md-flex align-items-center justify-content-between">
+                        <h5 class="section-content__title">Горячие предложения</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Start Rightside - Content -->
+                <div class="col-12">
+                    <div class="product-tab-area">
+                        <div class="tab-content ">
+                            <div class="tab-pane show active clearfix" id="sort-grid">
+                                {% for p in products_for_block_1 %}
+                                    {% include 'single_product.html' with p=p %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>  <!-- Start Rightside - Content -->
+            </div>
+        </div>
+    </div> <!-- ::::::  End  Product Style - Default Section  ::::::  -->
+
+
+    <!-- ::::::  Start banner Section  ::::::  -->
+    <div class="banner banner--1">
+        <div class="container">
+            <div class="row">
+                {% for b in banners_block_1 %}
+                    {% include 'single_banner.html' with b=b %}
+                {% endfor %}
+            </div>
+        </div>
+    </div> <!-- ::::::  End banner Section  ::::::  -->
+
+
+    <!-- ::::::  Start  Product Style - Default Section  ::::::  -->
+    <div class="product product--1 swiper-outside-arrow-hover">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-content section-content--border d-md-flex align-items-center justify-content-between">
+                        <h5 class="section-content__title">Подарок лучше не придумать</h5>
+
+                    </div>
+                </div>
+            </div>
+           <div class="row">
+                <!-- Start Rightside - Content -->
+                <div class="col-12">
+                    <div class="product-tab-area">
+                        <div class="tab-content ">
+                            <div class="tab-pane show active clearfix" id="sort-grid">
+
+
+                                {% for p in products_for_block_2 %}
+                                    {% include 'single_product.html' with p=p %}
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>  <!-- Start Rightside - Content -->
+            </div>
+        </div>
+    </div> <!-- ::::::  End  Product Style - Default Section  ::::::  -->
+
+    <!-- ::::::  Start banner Section  ::::::  -->
+    <div class="banner banner--1">
+        <div class="container">
+            <div class="row">
+                {% for b in banners_block_2 %}
+                    {% include 'single_banner.html' with b=b %}
+                {% endfor %}
+            </div>
+        </div>
+    </div> <!-- ::::::  End banner Section  ::::::  -->
+
+
+    <!-- ::::::  Start  Product Style - Default Section  ::::::  -->
+    <div class="product product--1 swiper-outside-arrow-hover">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-content section-content--border d-md-flex align-items-center justify-content-between">
+                        <h5 class="section-content__title">НОВИНКИ ЭТОГО МЕСЯЦА</h5>
+
+                    </div>
+                </div>
+            </div>
+           <div class="row">
+                <!-- Start Rightside - Content -->
+                <div class="col-12">
+                    <div class="product-tab-area">
+                        <div class="tab-content ">
+                            <div class="tab-pane show active clearfix" id="sort-grid">
+
+
+                                {% for p in products_for_block_3 %}
+                                    {% include 'single_product.html' with p=p %}
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>  <!-- Start Rightside - Content -->
+            </div>
+        </div>
+    </div> <!-- ::::::  End  Product Style - Default Section  ::::::  -->
+
+</main>
+
+<script src="/static/assets/js/product_handler_new.js"></script>
+{% endblock %}
+

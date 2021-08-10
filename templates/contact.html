@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}{{ shop_title }}{% endblock %}
+{% block content %}
+{{ block.super }}
+
+    <!-- ::::::  Start  Main Container Section  ::::::  -->
+    <main id="main-container" class="main-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-content">
+                        <h1 class="m-t-50 m-b-20 m-l-10">Напишите нам</h1>
+
+                        <form action="{% url 'mainpage:contact' %}" method="post" class="form-box">
+                            {% csrf_token%}
+                            <div class="col-md-12">
+                                <div class="form-box__single-group">
+                                    <label for="form-name">{{ form.name.label }}</label>
+                                    <input type="text" id="form-name"
+                                           value="{% if form.name.value %}{{ form.name.value|safe }}{% endif %}"
+                                           name="name"
+                                           required>
+                                    <span>{{ form.name.errors }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-box__single-group">
+                                    <label for="form-phone">{{ form.phone.label }}</label>
+                                    <input type="text" id="form-phone"
+                                           value="{% if form.phone.value %}{{ form.phone.value|safe }}{% endif %}"
+                                           name="phone">
+                                    <span>{{ form.phone.errors }}</span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div class="form-box__single-group">
+                                    <label for="form-text">{{ form.text.label }}</label>
+                                    <textarea name="text" rows="6" cols="30" type="text" id="form-text"
+                                           required>{% if form.text.value %}{{ form.text.value|safe }}{% endif %}</textarea>
+                                    <span>{{ form.text.errors }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3  pt-4">
+                                <button class="btn btn--block btn--small btn--blue btn--uppercase btn--weight" type="submit">Отправить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main> <!-- ::::::  End  Main Container Section  ::::::  -->
+
+{% endblock %}

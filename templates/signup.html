@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}Мой аккаунт - {{ shop_title }}{% endblock %}
+
+{% block content %}
+{{ block.super }}
+
+
+<!-- ::::::  Start  Main Container Section  ::::::  -->
+<main id="main-container" class="main-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-12 ml-auto mr-auto d-flex justify-content-center">
+                            <div class="my-5 col-lg-8 col-md-8 col-sm-12">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <h4>Регистрация пользователя</h4>
+                                    </div>
+
+                                    {% if form.errors %}
+                                        {% for k, v in form.errors.items %}
+                                            <div class="alert alert-danger" role="alert">{{ v }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    <div class="form-box__single-group">
+                                        <input name="firstname" type="text" placeholder="Имя"
+                                               value="{% if form.firstname.value %}{{ form.firstname.value|safe }}{% endif %}"
+                                               required>
+                                    </div>
+
+                                    <div class="form-box__single-group">
+                                        <input name="lastname" type="text" placeholder="Фамилия"
+                                               value="{% if form.lastname.value %}{{ form.lastname.value|safe }}{% endif %}"
+                                               required>
+                                    </div>
+
+                                    <div class="form-box__single-group">
+                                        <input name="email" type="email" placeholder="Email"
+                                               value="{% if form.email.value %}{{ form.email.value|safe }}{% endif %}"
+                                               required>
+                                    </div>
+
+                                    <div class="form-box__single-group">
+                                        <input name="phone" type="text" placeholder="Телефон"
+                                               value="{% if form.phone.value %}{{ form.phone.value|safe }}{% endif %}"
+                                               maxlength="12"
+                                               required>
+                                    </div>
+
+                                    <div class="form-box__single-group">
+                                        <input name="password1" type="password" placeholder="Пароль"
+                                               required>
+                                    </div>
+
+                                    <div class="form-box__single-group">
+                                        <input name="password2" type="password"  placeholder="Повторите пароль"
+                                               required>
+                                    </div>
+
+
+                                    <button class="btn btn--box btn--small btn--blue btn--uppercase btn--weight mt-4"
+                                            type="submit">Регистрация
+                                    </button>
+
+
+                                    <div class="d-flex justify-content-between flex-wrap mt-4">
+                                        <label for="agree_with_personal_data_handling">
+                                            {% if from.agree_with_personal_data_handling %}
+                                                <input type="checkbox" name="agree_with_personal_data_handling" id="agree_with_personal_data_handling" checked required>
+                                            {% else %}
+                                                <input type="checkbox" name="agree_with_personal_data_handling" id="agree_with_personal_data_handling" required>
+                                            {% endif %}
+                                            <span>Согласие на обработку персональных данных</span>
+                                        </label>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main> <!-- ::::::  End  Main Container Section  ::::::  -->
+
+{% endblock %}

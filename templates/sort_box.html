@@ -1,0 +1,8 @@
+<div class="form-group mt-4 pl-0">
+    <select class="form-control ordering-box" id="sot-box">
+        <option {% if ordering == 'relevance' %} selected {% endif %} value="relevance">По соответствию</option>
+        <option {% if ordering == 'by_name' %} selected {% endif %} value="by_name">По названию</option>
+        <option {% if ordering == 'price_low' %} selected {% endif %} value="price_low">Cначала дешевле</option>
+        <option {% if ordering == 'price_height' %} selected {% endif %} value="price_height">Cначала дороже</option>
+    </select>
+</div>

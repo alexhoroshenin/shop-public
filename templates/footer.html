@@ -1,0 +1,61 @@
+<!-- ::::::  Start  Footer Section  ::::::  -->
+<footer class="footer">
+    <div class="footer__top gray-bg p-tb-100 m-t-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-4 col-lg-6 col-12">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="index.html" class="footer__logo-link">
+                                <img src="/static/assets/img/logo/logo-color.jpg" alt="" class="footer__logo-img">
+                            </a>
+                        </div>
+                        <div class="footer__text">
+                            <p>Слоган магазина</p>
+                        </div>
+                        <div class="footer__text">
+                            <p><a href="tel:+7(912)0000000">+7 (912) 000 00 00</a>
+                            <br>пн-пт: 9:00 - 20:00 (Мск)
+                            <br>сб-вс: 10:00 - 17:00 (Мск)
+                            </p>
+                        </div>
+                        <div class="footer__text"><p>Москва, ул. Промышленная д. 1 к. Б</p></div>
+                        <br>
+                        <br>
+                        <div class="footer__text"><p>Интернет-магазин «ВсеТовары»</p></div>
+
+                    </div>
+                </div>
+                <div class="col-xl-2 col-lg-3 col-sm-6 col-12">
+                    <div class="footer__menu">
+                        <h4 class="footer__nav-title">Каталог</h4>
+                        <ul class="footer__nav">
+                            {% for cat_level_0 in menu_main_categories %}
+                                <li class="footer__list"><a href="/{{ cat_level_0.get_full_url }}" class="footer__link">{{ cat_level_0.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xl-2 col-lg-3 col-sm-6 col-12">
+                    <div class="footer__menu">
+                        <h4 class="footer__nav-title">Покупателю</h4>
+                        <ul class="footer__nav">
+                            <li class="footer__list"><a href="/delivery/" class="footer__link">Доставка и оплата</a></li>
+                            <li class="footer__list"><a href="/return/" class="footer__link">Условия возврата</a></li>
+                            <li class="footer__list"><a href="/policy/" class="footer__link">Политика конфиденциальности</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-12 col-12">
+                    <div class="footer__menu">
+                        <h4 class="footer__nav-title">Информация</h4>
+                        <ul class="footer__nav">
+                            <li class="footer__list"><a href="/about/" class="footer__link">О нас</a></li>
+                            <li class="footer__list"><a href="/contact/" class="footer__link">Напишите нам</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer> <!-- ::::::  End  Footer Section  ::::::  -->

@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}{{ title }} - {{ shop_title }}{% endblock %}
+
+{% block content %}
+{{ block.super }}
+
+    <!-- ::::::  Start  Main Container Section  ::::::  -->
+    <main id="main-container" class="main-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+
+                    {% if cart %}
+
+                        {% if cart.cart_items.all|length == 0 %}
+                            <div class="section-content">
+                                <h1 class="mt-5 mb-5">Корзина пустая</h1>
+                            </div>
+                            {% else %}
+                            <div class="section-content">
+                                <h1 class="mt-3 mb-3">Ваша корзина</h1>
+                            </div>
+
+                            <!-- Start Cart Table -->
+                            <div id="cart-table">
+                                {% for item in cart.get_cart_items_for_render.all %}
+                                    <div style="border: 1px solid;border-color: #cfd3d8;" class="row mx-1 product-row" data-cart-item-id="{{item.pk}}">
+                                        <div class="col-md-2 col-sm-4 d-flex justify-content-center align-self-center my-3" id="cart-item-thumbnail">
+                                                {% thumbnail item.product.images.all.0.image "100x100" crop="center" as im %}
+                                                    <a href="/{{ item.product.get_full_url }}">
+                                                        <img class="img-fluid" src="{{ im.url }}" alt="{{ item.product.name }}">
+                                                    </a>
+                                                {% empty %}
+                                                    {% thumbnail DEFAULT_PRODUCT_IMAGE "250x250" crop="center" as im %}
+                                                        <a href="/{{ item.product.get_full_url }}">
+                                                            <img class="img-fluid" src="{{ im.url }}" alt="{{ item.product.name }}">
+                                                        </a>
+                                                    {% endthumbnail %}
+                                                {% endthumbnail %}
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 d-flex justify-content-center align-self-center my-1" id="cart-item-name">
+                                                <a href="/{{ item.product.get_full_url }}">
+                                                    {{ item.product.name }}
+                                                </a>
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 d-flex justify-content-center align-self-center my-1" id="cart-item-price">
+                                            {% if item.product.has_discount %}
+                                                <span class="product__price-del">{{ item.product.price|floatformat }}</span>
+                                                <span class="product__price-reg">{{ item.product.get_discount_price|floatformat }} ₽</span>
+                                            {% else %}
+                                                <span class="product__price-reg">{{ item.product.price|floatformat }} ₽</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-3 col-sm-6 d-flex justify-content-center align-self-center my-1" id="cart-item-quantities">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-12 d-flex justify-content-center">
+                                                        <button style="font-size: 20px; border-radius: 0; height: 40px;" type="button" class="btn change-count-btn btn-light mx-1">-</button>
+                                                        <input type="number" inputmode="numeric" max="9999" min="0" step="1" data-product-count-field="" class="text-center change-count-input"
+                                                               value="{{ item.quantity|floatformat }}">
+                                                        <button style="font-size: 20px; border-radius: 0; height: 40px;" type="button" class="btn change-count-btn btn-light mx-1">+</button>
+                                                    </div>
+                                                 </div>
+                                                <div class="row">
+                                                    <div class="col-12 d-flex justify-content-center my-0 balance-limit text-danger">
+                                                        {% if item.exceed_balance %}
+                                                        Доступно: {{ item.balance|floatformat }}
+                                                        {% endif %}
+                                                    </div>
+                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 col-sm-6 d-flex justify-content-center align-self-center my-2" id="cart-item-remove">
+                                            <a  href="#"><i data-cart-item-remove="" class="fa fa-times"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <!-- End Cart Table -->
+
+                        <form action="{% url 'cart:index' %}" method="post" class="row">{% csrf_token %}
+                        <div class="col-lg-4 col-md-6">
+                            <div class="sidebar__widget gray-bg m-t-40">
+                                <div class="sidebar__box">
+                                    <h5 class="sidebar__title">Выберите способ доставки</h5>
+                                </div>
+
+                                <div>
+                                    <ul class="shipping-cost m-t-10">
+                                        {% for delivery_item in delivery_methods %}
+                                        <li>
+                                            <label for="delivery_{{ delivery_item.pk }}">
+                                                {% if cart.delivery_method == delivery_item %}
+                                                    <input data-delivery-method-radio="" type="radio" class="shipping-select" name="delivery_method"
+                                                       value="{{ delivery_item.pk }}" id="delivery_{{ delivery_item.pk }}" checked>
+                                                {% else %}
+                                                    <input data-delivery-method-radio="" type="radio" class="shipping-select" name="delivery_method"
+                                                       value="{{ delivery_item.pk }}" id="delivery_{{ delivery_item.pk }}">
+                                                {% endif %}
+                                                <span>{{ delivery_item.name }}</span>
+                                            </label>
+                                            <span class="ship-price">{{ delivery_item.price|floatformat }} руб</span>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <div class="sidebar__widget gray-bg m-t-40">
+                                <div class="sidebar__box">
+                                    <h5 class="sidebar__title">Выберите способ оплаты</h5>
+                                </div>
+
+                                <div>
+                                    <ul class="shipping-cost m-t-10">
+                                        {% for payment_item in payment_methods %}
+                                        <li>
+                                            <label for="payment_{{ payment_item.pk }}">
+                                                {% if cart.payment_method == payment_item %}
+                                                    <input data-payment-method-radio="" type="radio" class="shipping-select" name="payment_method"
+                                                        value="{{ payment_item.pk }}" id="payment_{{ payment_item.pk }}" checked><span>{{ payment_item.name }}</span>
+                                                {% else %}
+                                                    <input data-payment-method-radio="" type="radio" class="shipping-select" name="payment_method"
+                                                        value="{{ payment_item.pk }}" id="payment_{{ payment_item.pk }}"><span>{{ payment_item.name }}</span>
+                                                {% endif %}
+                                            </label>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <div class="sidebar__widget gray-bg m-t-40">
+                                <div class="sidebar__box">
+                                    <h5 class="sidebar__title">Итоги заказа</h5>
+                                </div>
+
+                                {% with cart_results=cart.get_result %}
+                                    <h6 class="total-cost">Товары<span id="products-cost">{{ cart_results.products_cost|floatformat }} руб</span></h6>
+                                    <h6 class="total-cost">Доставка<span id="delivery-cost">{{ cart_results.delivery_cost|floatformat }} руб</span></h6>
+                                    <h6 class="total-cost">Скидка<span id="discount-sum">
+                                        {% if cart_results.discount_sum > 0 %}-{% endif %}
+                                        {{ cart_results.discount_sum|floatformat }} руб
+                                    </span></h6>
+
+                                    <h4 class="grand-total m-tb-25">К оплате<span id="total">{{ cart_results.total|floatformat }} руб</span></h4>
+                                {% endwith %}
+                                <button class="btn btn--box btn--small btn--blue btn--uppercase btn--weight"
+                                        type="submit">
+                                    Оформить заказ
+                                </button>
+                            </div>
+                        </div>
+                        </form>
+
+                        {% endif %}
+
+                    {% else %}
+                        <div class="section-content">
+                            <h1 class="section-content__title">Корзина пустая</h1>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+
+
+        </div>
+    </main> <!-- ::::::  End  Main Container Section  ::::::  -->
+
+<script src="/static/assets/js/cart_handler.js"></script>
+
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}{{ product.name }} - {{ shop_title }}{% endblock %}
+
+{% block content %}
+{{ block.super }}
+
+
+<!-- ::::::  Start  Main Container Section  ::::::  -->
+<main id="main-container" class="main-container">
+    <div class="container">
+        <div class="row">
+            <!-- Start Product Details Gallery -->
+            <div class="col-12">
+                <div class="product-details" data-product-id="{{ product.pk }}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="product-details-box product-title_mobile">
+                                <h1>{{product.name}}</h1>
+                            </div>
+                            <div class="product-gallery-box m-b-60">
+
+                                {% if images %}
+
+                                <div class="product-image--large overflow-hidden">
+                                    {% with first_image=images|first %}
+                                    <img class="img-fluid" id="img-zoom" src="{{ first_image.image.url  }}"
+                                         data-zoom-image="{{ first_image.image.url }}" alt="">
+                                    {% endwith %}
+                                </div>
+
+                                <div class="pos-relative m-t-30">
+                                    <div id="gallery-zoom"
+                                         class="product-image--thumb product-image--thumb-horizontal overflow-hidden swiper-outside-arrow-hover m-lr-30">
+                                        <div class="swiper-wrapper">
+
+                                            {% for im in images %}
+                                            <div class="swiper-slide">
+                                                <a class="zoom-active" data-image="{{ im.image.url }}"
+                                                   data-zoom-image="{{ im.image.url }}">
+                                                    <img class="img-fluid" src="{{ im.image.url }}" alt="">
+                                                </a>
+                                            </div>
+                                            {% endfor %}
+
+
+                                        </div>
+                                    </div>
+                                    <div class="swiper-buttons">
+                                        <!-- Add Arrows -->
+                                        <div class="swiper-button-next gallery__nav gallery__nav--next"><i
+                                                class="fal fa-chevron-right"></i></div>
+                                        <div class="swiper-button-prev gallery__nav gallery__nav--prev"><i
+                                                class="fal fa-chevron-left"></i></div>
+                                    </div>
+
+                                    {% for im in images %}
+									   <a href="{{ im.image.url }}" class="fancylink" data-fancybox="images"></a>
+									{% endfor %}
+                                </div>
+
+                                {% else %}
+                                    {% thumbnail DEFAULT_PRODUCT_IMAGE "540x540" crop="center" as im %}
+
+                                    <div class="product-image--large overflow-hidden">
+                                        <img class="img-fluid" id="img-zoom" src="{{ im.url }}"
+                                             data-zoom-image="/{{ default_image }}" alt="">
+                                    </div>
+                                    {% endthumbnail %}
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="product-details-box">
+                                <h1>{{product.name}}</h1>
+                            </div>
+                            <div class="product__price mt-3">
+                                {% if balance > 0 %}
+                                        {% if product.has_discount %}
+                                            <span class="product__price-del">{{ product.price|floatformat:"0" }} руб</span>
+                                            <span class="product__price-product-page">{{ product.get_discount_price|floatformat:"0"}} руб</span>
+                                        {% else %}
+                                            <span class="product__price-product-page">{{ product.price|floatformat:"0" }} руб</span>
+                                        {% endif %}
+                                {% else %}
+                                    <span class="product__price-reg">Нет в наличии</span>
+                                {% endif %}
+                            </div>
+                            <div class="product__desc m-t-25 m-b-30">
+                                <p>{{ product.short_description }}</p>
+                            </div>
+
+                            {% if balance > 0 %}
+
+                                <div class="row product-in-cart my-5 {% if cart and product in cart_products_list %}{% else %}d-none{% endif %}">
+
+                                    <div class="col-lg-2 col-md-10 col-sm-10 m-b-10">
+                                        <a href="/cart" id="add_item_to_cart_btn_success" class="without-underline">
+                                            <div  class="btn_success btn--weight m-r-30">В КОРЗИНЕ</div>
+                                        </a>
+                                    </div>
+
+                                    <div class="col-lg-10 col-md-10 col-sm-10">
+                                        <div class="col-12 d-flex justify-content-lg-center justify-content-md-left justify-content-sm-left">
+                                            <button type="button" class="btn change-count-btn btn-light mx-1">-</button>
+                                            <input type="number" inputmode="numeric" max="9999" min="0" step="1" data-product-count-field="" class="text-center change-count-input"
+                                                   value="{% if count_in_cart %}{{ count_in_cart|floatformat }}{% else %}1{% endif %}">
+                                            <button type="button" class="btn change-count-btn btn-light mx-1">+</button>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-lg-center justify-content-md-left justify-content-sm-left my-0 balance-limit text-danger">
+                                            {% if count_in_cart > product.get_balance %}Доступно: {{ product.get_balance|floatformat }}{% endif %}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="product-not-in-cart d-flex my-5 {% if cart and product in cart_products_list %}d-md-none d-lg-none d-sm-none{% else %}d-flex{% endif %}">
+
+                                    <form id="add_item_to_cart_form" action="#"
+                                          method="get" class="add-to-cart">
+                                        {% csrf_token %}
+                                        <button type="submit" id="add_item_to_cart_btn" data-product-id="{{ product.pk }}"
+                                                class="btn btn--box btn--small btn--blue btn--uppercase btn--weight product-view-btn" >В КОРЗИНУ
+                                        </button>
+                                    </form>
+
+                                </div>
+
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End Product Details Gallery -->
+
+        <!-- ПОДРОБНОСТИ -->
+        <div class="col-12">
+            <div class="product">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Описание</h3>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="product-details-tab-box m-t-20">
+                            <div class="tab-content">
+                                {% if product.description %}{{ product.description }}{% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {% if similar_products %}
+                <div class="col-12 similar_products my-3">
+                    <h3 class="similar_products-title">Похожие товары</h3>
+                    <div class="product-tab-area my-5">
+                        <div class="tab-content ">
+                            <div class="tab-pane show active clearfix" id="sort-grid">
+                                {% for p in similar_products %}
+                                    {% include 'single_product.html' with p=p %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>  <!-- Start Rightside - Content -->
+        {% endif %}
+
+
+        </div>
+    </div>
+
+</main> <!-- ::::::  End  Main Container Section  ::::::  -->
+
+
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+
+<script src="/static/assets/js/product_handler_new.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script>
+if(document.querySelector('img#img-zoom') != null) {
+	document.querySelector('img#img-zoom').addEventListener('touchmove', function (event) {
+		var event2 = new CustomEvent('touchmove2', {detail: {original: event}});
+		event.target.dispatchEvent(event2);
+		event.stopPropagation();
+	}, true);
+}
+
+$(document).ready(function() {
+	if ($.fancybox.isMobile) {
+		$('img#img-zoom').on('click', function(){
+			$('.fancylink[href="' + $(this).attr('src') + '"]').click();
+		});
+	}
+});
+</script>
+
+
+
+{% endblock %}

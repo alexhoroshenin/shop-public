@@ -1,0 +1,47 @@
+<!--file:///C:/Python/MyProjects/shopdesign/%D0%A8%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD%D1%8B/Kinle/kinle/shop-4-grid.html-->
+
+
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}{{ title }} - {{ shop_title }}{% endblock %}
+{% block content %}
+{{ block.super }}
+
+<!-- ::::::  Start  Main Container Section  ::::::  -->
+<main id="main-container" class="main-container">
+    <div class="container">
+        <div class="row">
+            <!-- Start Rightside - Content -->
+            <div class="col-12">
+                <h1>{{ title }}</h1>
+
+                {% include 'sort_box.html' %}
+
+                <div class="product-tab-area">
+                    <div class="tab-content ">
+                        <div class="tab-pane show active clearfix" id="sort-grid">
+                            {% if page_obj.object_list %}
+
+                                {% for p in page_obj.object_list %}
+                                    {% include 'single_product.html' with p=p %}
+                                {% endfor %}
+                            {% else %}
+                                <h2>Товары отсуствуют</h2>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>  <!-- Start Rightside - Content -->
+        </div>
+    </div>
+</main> <!-- ::::::  End  Main Container Section  ::::::  -->
+
+{% include "paginator.html" %}
+
+<script src="/static/assets/js/search_filter.js"></script>
+<script src="/static/assets/js/product_handler_new.js"></script>
+
+{% endblock %}

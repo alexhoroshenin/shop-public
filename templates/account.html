@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}Мой аккаунт - {{ shop_title }}{% endblock %}
+
+{% block content %}
+{{ block.super }}
+
+
+    <!-- ::::::  Start  Main Container Section  ::::::  -->
+    <main id="main-container" class="main-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <!-- :::::::::: Start My Account Section :::::::::: -->
+                    <div class="my-account-area">
+                        <div class="row">
+                            <div class="col-12 d-flex justify-content-center">
+                            {% if message %}
+                                <div class="alert alert-primary" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endif %}
+
+                            {% if error %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endif %}
+
+                            </div>
+
+
+                            <div class="col-xl-3 col-md-4">
+                                <div class="my-account-menu">
+                                    <ul class="nav account-menu-list flex-column nav-pills" id="pills-tab" role="tablist">
+
+                                        <li>
+                                            <a id="pills-order-tab" class="link--icon-left" data-toggle="pill" href="#pills-order" role="tab"
+                                                aria-controls="pills-order" aria-selected="false"><i
+                                                    class="fas fa-shopping-cart"></i> Заказы</a>
+                                        </li>
+
+                                        <li>
+                                            <a id="pills-account-tab" class="link--icon-left" data-toggle="pill" href="#pills-account" role="tab"
+                                                aria-controls="pills-account" aria-selected="false"><i class="fas fa-user"></i>
+                                                Контактная информация</a>
+                                        </li>
+                                        <li>
+                                            <a class="link--icon-left" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i> Выход из аккаунта</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-xl-8 col-md-8">
+                                <div class="tab-content my-account-tab" id="pills-tabContent">
+                                    <div class="tab-pane fade show active" id="pills-order" role="tabpanel" aria-labelledby="pills-order-tab">
+                                        <div class="my-account-order account-wrapper">
+                                            <h2 class="account-title">Мои заказы</h2>
+                                                {% for o in orders %}
+
+                                                    <div class="row m-b-10 m-t-50">
+                                                        <div class="col-12">
+                                                            <a href="{% url 'order:show_order' pk=o.pk %}"><h5>Заказ {{ o.pk }} от {{ o.date_created_str }}</h5></a>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            Статус {{ o.status }}
+                                                        </div>
+                                                        <div class="col-12">
+                                                            {{ o.delivery_method }}
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            Сумма заказа {{ o.total|floatformat }} руб
+                                                        </div>
+
+                                                        <div class="row col-12 mt-2">
+                                                            {% for item in o.order_items.all %}
+                                                                <div class="col-2">
+                                                                    {% thumbnail item.product.images.all.0.image "100x100" crop="center" as im %}
+                                                                            <a href="{% url 'order:show_order' pk=o.pk %}" class="product__img--link">
+                                                                                <img class="product__img" src="{{ im.url }}" alt="">
+                                                                            </a>
+                                                                        {% empty %}
+                                                                            {% thumbnail DEFAULT_PRODUCT_IMAGE "540x540" crop="center" as im %}
+                                                                            <a href="{% url 'order:show_order' pk=o.pk %}" class="product__img--link">
+                                                                                <img class="product__img" src="{{ im.url }}" alt="">
+                                                                            </a>
+                                                                        {% endthumbnail %}
+                                                                    {% endthumbnail %}
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+
+
+                                                    </div>
+
+                                                {% endfor %}
+
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="pills-account" role="tabpanel"
+                                        aria-labelledby="pills-account-tab">
+
+                                        <div class="my-account-details account-wrapper">
+                                            <h4 class="account-title m-b-20">Контактная информация</h4>
+                                            <div class="account-details">
+                                                <form class="row" action="" method="post">
+                                                    {% csrf_token %}
+
+                                                    {% if form_account_details and form_account_details.general_errors %}
+                                                    <div class="col-md-12">
+                                                        {% for e in form_account_details.general_errors %}
+                                                            <div class="alert alert-danger" role="alert">{{ e }}</div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% endif %}
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="email">Email</label>
+                                                            <input type="email" class="form-control" id="email" placeholder="Email" value="{{ request.user.email }}" disabled>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="firstname">Имя</label>
+                                                            <input type="text" name="firstname" class="form-control" id="firstname" placeholder=""
+                                                                   value="{{ form_account_details.firstname.value|default_if_none:'' }}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                      <div class="form-group">
+                                                        <label for="lastname">Фамилия</label>
+                                                        <input type="text" class="form-control" name="lastname" id="lastname" placeholder="" value="{{ form_account_details.lastname.value|default_if_none:'' }}" required>
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                      <div class="form-group">
+                                                        <label for="phone">Телефон</label>
+                                                        <input type="text" class="form-control" name="phone" id="phone" placeholder="" value="{{ form_account_details.phone.value|default_if_none:'' }}" required>
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <input type="submit" name="account_details_btn" class="btn btn--box btn--small btn--uppercase btn--blue" value="Сохранить изменения" required>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="my-account-details account-wrapper m-t-30">
+                                            <h4 class="account-title m-b-20">Изменение пароля</h4>
+                                            <div class="account-details">
+                                                <form class="row" action="" method="post">
+                                                    {% csrf_token %}
+
+                                                    {% if form_change_password.errors %}
+                                                        {% for e in form_change_password.errors.values %}
+                                                            <div class="alert alert-danger" role="alert">{{ e }}</div>
+                                                        {% endfor %}
+                                                    {% endif %}
+
+                                                    {% if form_change_password and form_change_password.general_errors %}
+                                                    <div class="col-md-12">
+                                                        {% for e in form_change_password.general_errors %}
+                                                            <div class="alert alert-danger" role="alert">{{ e }}</div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% endif %}
+
+                                                    <div class="col-md-12">
+                                                      <div class="form-group">
+                                                        <label for="firstname">Введите старый пароль</label>
+                                                        <input type="password" name="old_password" class="form-control" id="old_password" value="">
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                      <div class="form-group">
+                                                        <label for="password1">Введите новый пароль</label>
+                                                        <input type="password" class="form-control" id="password1" name="password1" value="">
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                      <div class="form-group">
+                                                        <label for="password2">Повторите новый пароль</label>
+                                                        <input type="password" class="form-control" id="password2" name="password2" value="">
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <input type="submit" name="change_password_btn" class="btn btn--box btn--small btn--uppercase btn--blue" value="Изменить пароль">
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- :::::::::: End My Account Section :::::::::: -->
+                </div>
+            </div>
+        </div>
+    </main> <!-- ::::::  End  Main Container Section  ::::::  -->
+
+
+{% endblock %}
