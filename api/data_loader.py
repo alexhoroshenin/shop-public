@@ -10,9 +10,7 @@ from catalog.utils import get_image_upload_path
 
 
 class JsonLoader:
-    """Загружает распарсенные данные в базу
-
-    НЕ ДОРАБОТАН
+    """Загружает данные в базу
     """
     def __init__(self, input_json_converter):
         self.input_json_converter = input_json_converter
@@ -28,7 +26,7 @@ class JsonLoader:
 
 
 class XmlLoader:
-    """Загружает распарсенные данные из XML в базу"""
+    """Загружает данные из XML в базу"""
     def __init__(self, input_xml_parser):
         self.input_xml_parser = input_xml_parser
         self._load()
@@ -49,7 +47,7 @@ class XmlLoader:
 
 
 class AbstractModelLoader:
-    """Абстрактный класс загрузки распарсенных данных в базу джанго"""
+    """Абстрактный класс загрузки данных в базу джанго"""
     def __init__(self, model, data, *args, **kwargs):
         self.model = model
         self.input_data = data
